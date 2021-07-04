@@ -1,0 +1,151 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<meta name="keywords" content="hexo,Template,render,error">
+	
+	
+	<meta name="description" content="Template render error: (unknown path)  parseIf: expected elif, else, or endif, got end of file Error: Block title defined more than once">
+	
+	<title> template-render-error - CQH.CH</title>
+	
+<link rel="stylesheet" href="/css/zerone.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+
+<div class="index-about">
+    <i> Capital of Quant and Hedge </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/src/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>CQH.CH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li >
+                <a href="/categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Capital of Quant and Hedge </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        template-render-error
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2019-12-23 14:26:38</span></span>
+        
+        <span class="attr">Tags：/
+        
+        <a class="tag" href="/tags/#hexo" title="hexo">hexo</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#debug" title="debug">debug</a>
+        <span>/</span>
+        
+        
+        </span>
+
+    </div>
+
+    <div class="post-content no-indent">
+        <h1 id="Template-render-error"><a href="#Template-render-error" class="headerlink" title="Template render error"></a>Template render error</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>hexo g 或 hexo s时报错如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ hexo s</span><br><span class="line">INFO  Start processing</span><br><span class="line">FATAL Something&#39;s wrong. Maybe you can find the solution here: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;troubleshooting.html</span><br><span class="line">Template render error: (unknown path)</span><br><span class="line">  parseIf: expected elif, else, or endif, got end of file</span><br><span class="line"></span><br><span class="line">$ hexo g</span><br><span class="line">INFO  Start processing</span><br><span class="line">FATAL Something&#39;s wrong. Maybe you can find the solution here: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;troubleshooting.html</span><br><span class="line">Template render error: (unknown path)</span><br><span class="line">  Error: Block &quot;title&quot; defined more than once.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>模板参数传递错误，页面中含有的错误的引用，或引用未被代码块包含，解析会出问题。</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>仔细检查引用的参数，确保没有错误或多次定义。如果是文章中演示，应将其放入代码段中。</p>
+
+        
+        <br />
+    </div>
+</div>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2021 <a target="_blank" rel="noopener" href="http://cqh.ch/">CQH</a></p>
+</footer>
+
+
+
+
+</body></html>
+
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/baidu.js"></script>
+
+
+<script src="/js/jquery.min.js"></script>
+

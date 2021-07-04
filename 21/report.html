@@ -1,0 +1,155 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<meta name="keywords" content="黑客,药师">
+	
+	
+	<meta name="description" content="始终尝试更优的方案，优雅的解决问题才是初心与使命">
+	
+	<title> 《黑客与药师——报告》 - CQH.CH</title>
+	
+<link rel="stylesheet" href="/css/zerone.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+
+<div class="index-about">
+    <i> Capital of Quant and Hedge </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/src/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>CQH.CH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li >
+                <a href="/categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Capital of Quant and Hedge </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《黑客与药师——报告》
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2021-01-24 00:00:00</span></span>
+        
+        <span class="attr">Tags：/
+        
+        <a class="tag" href="/tags/#黑客与药师" title="黑客与药师">黑客与药师</a>
+        <span>/</span>
+        
+        
+        </span>
+
+    </div>
+
+    <div class="post-content no-indent">
+        <p>在完成了<a href="https://log.cqh.ch/20/data.html">数据处理</a> 之后，我有了更进一步的想法，自动生成检验报告。因检验员要花很多时间写报告，而既然有了处理数据，为什么不把报告也一起处理了呢？</p>
+<p>最开始，我想到用python操作doc。<a target="_blank" rel="noopener" href="https://python-docx.readthedocs.io/en/latest">python-docx</a> 只展示了基本的读写操作，要实现我想要的东西基本上全新从零构造，和生成网页差不多，样式跟内容混搭，还是算了吧。</p>
+<p>然后我就转到了生成网页。虽然多了css控制布局，但设计仍是个脏活，即使所见及所得也可能得不到跟原来一样的界面。如果将原来的报告模板作为背景图片，又涉及数据的定位问题，也是麻烦。</p>
+<p>后来我想的是水晶报表这类成熟商业软件，但这种方案也要求重新设计模板，而且我不懂C#。</p>
+<p>就在我纠结的时候，看到有人说doc其实是个压缩文件。我当即来了兴趣，如果可以弄懂其构造或许就能按我的意愿操纵了。以下是doc/docx/odt用7zip打开的样子。<br><img src="7zip.jpg" alt="7zip压缩软件打开办公文档" title="7zip压缩软件打开办公文档"> </p>
+<p>微软家封闭的doc一看就没有继续研究的兴趣，而开放的docx则像个打包的网页，文本是存在于/word/document.xml。只要将doc转为docx，解压出/word/document.xml进行操作，然后再打包回去就可以了。理论上应该是这样的，但是当我将docx解压再打包回去的时候并不能得到原来的文件，难道我还得去弄懂docx的打包算法吗？有没有直接操作压缩文件，又不会破环其编码的方法。我接触到了<a target="_blank" rel="noopener" href="https://docs.python.org/3/library/zipfile.html">zipfile</a>，很幸运就是我想要的。</p>
+<p>就这样绕了一圈，我又回到了开始。只不过不是用docx模块而是用zipfile模块迂回解决了问题。先将数据用键值对打包成字典，然后将docx文档需要填入数据的地方用键预先占位，再用zipfile打开docx中的/word/document.xml，然后遍历将键替换成值，最后保存输出就可以了，问题得解。</p>
+<p>后来我想起了大学自学java的时候老师讲过的一种MVC编程模式，仔细想来我的方案就是走的这个路子，用办公表格的二维表做数据模型M，用办公文档做视图V，用python做控制C。这种做法真的是非常省心省力省时。</p>
+<p>我试图将检验员从无聊报告书写的工作解放出来，并给出了解决方案，让公司可以无痛无缝地过渡到自动化时代，但我未能说服领导采用我的方案。这是我的悲哀也是公司的悲哀，企业追逐利润当降低成本提高效率。因理念不合我最终决定离开，在离开之前我有幸看到了Waters的工程师做新仪器的确认，一套流程下来如行云流水一般，让我意识到自己还是只小菜鸟。这让我谦逊，但并不是重点。重点是我看见人家用仪器自带的功能出报告，应了同事那句“哔了狗”，原来我们确实是在做低效率的无聊工作。<br><img src="gxp.jpg" alt="始无畏惧,终不迷茫" title="始无畏惧,终不迷茫"> </p>
+<p>上了岸的鱼便不再是鱼，我不想探讨药检的是与非，我想说的是这段“黑客”经历为我打开了一个新世界，也是《黑客与药师》系列的缘起。当然黑客不仅仅是编程，始终尝试更优的方案，优雅的解决问题才是初心与使命。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">######</span><br><span class="line"># docx.py docx文档生成</span><br><span class="line"># by cqh.ch 2016-11-02</span><br><span class="line">######</span><br><span class="line"></span><br><span class="line">def wd(dic, src&#x3D;&#39;rcd.docx&#39;):</span><br><span class="line">	src &#x3D; zipfile.ZipFile (src, &#39;r&#39;)</span><br><span class="line">	wdx &#x3D; src.read(&#39;word&#x2F;document.xml&#39;)</span><br><span class="line">	for key,val in dic.items():</span><br><span class="line">		wdx &#x3D; wdx.replace(key.encode(&#39;utf-8&#39;), str(val).encode(&#39;utf-8&#39;))</span><br><span class="line">	src.close()</span><br><span class="line">	return wdx</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">def docx(wdx, src&#x3D;&#39;rcd.docx&#39;, lot&#x3D;time.time()):#生成docx文件</span><br><span class="line">	src &#x3D; zipfile.ZipFile(src, &#39;r&#39;) </span><br><span class="line">	des &#x3D; zipfile.ZipFile(str(lot)+&#39;.docx&#39;, &#39;w&#39;)</span><br><span class="line">	for item in src.infolist():</span><br><span class="line">		if (item.filename &#x3D;&#x3D; &#39;word&#x2F;document.xml&#39;):</span><br><span class="line">			des.writestr(item, wdx)</span><br><span class="line">		else:</span><br><span class="line">			des.writestr(item, src.read(item.filename))</span><br><span class="line">	src.close()</span><br><span class="line">	des.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+        
+        <br />
+    </div>
+</div>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2021 <a target="_blank" rel="noopener" href="http://cqh.ch/">CQH</a></p>
+</footer>
+
+
+
+
+</body></html>
+
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/baidu.js"></script>
+
+
+<script src="/js/jquery.min.js"></script>
+

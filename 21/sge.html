@@ -1,0 +1,148 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<meta name="keywords" content="试金者,金交所,行情,分时,数据">
+	
+	
+	<meta name="description" content="要想分析贵金属的状况，首先得有数据。">
+	
+	<title> 《试金者——抓取金交所行情数据》 - CQH.CH</title>
+	
+<link rel="stylesheet" href="/css/zerone.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+
+<div class="index-about">
+    <i> Capital of Quant and Hedge </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/src/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>CQH.CH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li >
+                <a href="/categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Capital of Quant and Hedge </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《试金者——抓取金交所行情数据》
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2021-04-18 00:00:00</span></span>
+        
+        <span class="attr">Tags：/
+        
+        <a class="tag" href="/tags/#Lakia" title="Lakia">Lakia</a>
+        <span>/</span>
+        
+        
+        </span>
+
+    </div>
+
+    <div class="post-content no-indent">
+        <p>要想分析贵金属的状况，首先得有数据。上海黄金交易所网站提供了每日、每月的数据，通过抓取和清洗就可以得到（更便捷的是采用新浪财经贵金属栏目已经整理的二手数据）。但这篇文章的目标不是每日和每月的数据，而是可用用于分时分析的分时数据。</p>
+<p>网络上没有现成开放的分时数据集，好在金交所的首页上提供了分时趋势，通过网络分析就可以取得其数据流，再利用cURL重构出其请求。将cURL转换成Pyhton代码，可以看到data参数中有instid这个键，对应了贵金属的品种，据此就可以构造出爬虫。思路非常简单粗暴，在具体实现上可以将所有合约品种打包成列表，然后遍历打包成data字典，然后用requests.post()取得反馈。<br><img src="sge1.jpg" alt="上海黄金交易所网站网络分析" title="上海黄金交易所网站网络分析"><br><img src="sge2.jpg" alt="cURL转换" title="cURL转换"> </p>
+<p>获得的反馈为json数据流，可以利用json模块将其处理成json，在其结构体中，我们读到了heyue和delaystr两个键，对应了合约品种和数据更新时间，可以用此构建文件句柄。而通过分析金交所的交易规则和delaystr键值，可以确定的是在交易日的15:50-19:50这个时间段抓取就是交易日的完整数据，也就是说在这个时间段运行爬虫就可以当日的分时数据。</p>
+<p>在实际的应用中，我们可能要加上进度、日志、文件读写或数据库读写等功能，基本上一个爬虫项目就已经有模有样了。但如果你的目的不是奔着完整一手数据去的，新浪财经可以直接通过url得到瞬时数据，这样或许更为经济。</p>
+<p>以下为代码实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line">#getSgeQutn.py 获得上金所每日详细价格数据</span><br><span class="line">#Copyright © Ande</span><br><span class="line"></span><br><span class="line">#v1 20180416</span><br><span class="line">#v2 20181203 加入日志记录log</span><br><span class="line">#v3 增加熊猫金币合约PGC30g</span><br><span class="line">#v4 20190102 原数据地址由http升级为https. 若使用url &#x3D; &#39;http:&#x2F;&#x2F;www.sge.com.cn&#x2F;graph&#x2F;quotations&#39;只能请求到Au99.99, 改为url &#x3D; &#39;https:&#x2F;&#x2F;www.sge.com.cn&#x2F;graph&#x2F;quotations&#39;方能正常</span><br><span class="line">#v5 20191016 增加两个纽约金延期产品，合约代码为NYAuTN06,NYAuTN12</span><br><span class="line">#v6 20191029 修正ssl.SSLCertVerificationError requests.exceptions.SSLError</span><br><span class="line">#v7 20200104 1.读取json自身数据命名  2.判别月份目录</span><br><span class="line"></span><br><span class="line">import os</span><br><span class="line">import requests</span><br><span class="line">import datetime</span><br><span class="line">import time</span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 禁用安全请求警告</span><br><span class="line">import urllib3</span><br><span class="line">urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)</span><br><span class="line"></span><br><span class="line">#writeToHead() 在文件开头写入内容</span><br><span class="line">def writeToHead(new, file &#x3D; &#39;.&#x2F;&#39; + datetime.datetime.now().strftime(&quot;%Y%m&quot;) + &#39;&#x2F;log.txt&#39;):</span><br><span class="line">    try:</span><br><span class="line">        with open(file,&#39;r+&#39;) as f:</span><br><span class="line">            old &#x3D; f.read()</span><br><span class="line">            f.seek(0,0)</span><br><span class="line">            f.write(new +&#39;\n&#39; + old)</span><br><span class="line">    except FileNotFoundError:</span><br><span class="line">        with open(file,&#39;a+&#39;) as f:</span><br><span class="line">            f.write(new)</span><br><span class="line">    except PersmissionError:</span><br><span class="line">        pass</span><br><span class="line"> </span><br><span class="line">url &#x3D; &#39;https:&#x2F;&#x2F;www.sge.com.cn&#x2F;graph&#x2F;quotations&#39;#数据url地址</span><br><span class="line"></span><br><span class="line">cookies &#x3D; &#123;</span><br><span class="line">    &#39;Hm_lvt_9165e30c92968eb1baa5e3eb5f34dc60&#39;: &#39;1546584532&#39;,</span><br><span class="line">    &#39;JSESSIONID&#39;: &#39;2A113D952975290E4A1A4A9353B4AAC3&#39;,</span><br><span class="line">    &#39;Hm_lpvt_9165e30c92968eb1baa5e3eb5f34dc60&#39;: &#39;1546584727&#39;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">headers &#x3D; &#123;</span><br><span class="line">    &#39;Host&#39;: &#39;www.sge.com.cn&#39;,</span><br><span class="line">    &#39;User-Agent&#39;: &#39;Mozilla&#x2F;5.0 (Windows NT 5.1; rv:52.0) Gecko&#x2F;20100101 Firefox&#x2F;52.0&#39;,</span><br><span class="line">    &#39;Accept&#39;: &#39;application&#x2F;json, text&#x2F;javascript, *&#x2F;*; q&#x3D;0.01&#39;,</span><br><span class="line">    &#39;Accept-Language&#39;: &#39;zh-CN,zh;q&#x3D;0.8,en-US;q&#x3D;0.5,en;q&#x3D;0.3&#39;,</span><br><span class="line">    &#39;Content-Type&#39;: &#39;application&#x2F;x-www-form-urlencoded; charset&#x3D;UTF-8&#39;,</span><br><span class="line">    &#39;X-Requested-With&#39;: &#39;XMLHttpRequest&#39;,</span><br><span class="line">    &#39;Referer&#39;: &#39;https:&#x2F;&#x2F;www.sge.com.cn&#x2F;&#39;,</span><br><span class="line">    &#39;Connection&#39;: &#39;keep-alive&#39;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">heyue &#x3D; [</span><br><span class="line">    &quot;Au99.99&quot;,</span><br><span class="line">    &quot;Au99.95&quot;,</span><br><span class="line">    &quot;Au100g&quot;,</span><br><span class="line">    &quot;Pt99.95&quot;,</span><br><span class="line">    &quot;Ag(T+D)&quot;,</span><br><span class="line">    &quot;Au(T+D)&quot;,</span><br><span class="line">    &quot;mAu(T+D)&quot;,</span><br><span class="line">    &quot;Au(T+N1)&quot;,</span><br><span class="line">    &quot;Au(T+N2)&quot;,</span><br><span class="line">    &quot;Ag99.99&quot;,</span><br><span class="line">    &quot;Ag99.9&quot;,</span><br><span class="line">    &quot;iAu99.99&quot;,</span><br><span class="line">    &quot;Au99.5&quot;,</span><br><span class="line">    &quot;iAu100g&quot;,</span><br><span class="line">    &quot;iAu99.5&quot;,</span><br><span class="line">    &quot;Au50g&quot;,</span><br><span class="line">    &quot;PGC30g&quot;,</span><br><span class="line">    &quot;NYAuTN06&quot;,</span><br><span class="line">    &quot;NYAuTN12&quot;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">dt_ &#x3D; datetime.datetime.now()</span><br><span class="line">writeToHead(&#39;\n&#39;)#日志头标志 ---YYYYMMDDHHMMSS---</span><br><span class="line"></span><br><span class="line">for hy in heyue:</span><br><span class="line"></span><br><span class="line">    data &#x3D; &#123;&#39;instid&#39;: hy&#125;</span><br><span class="line">    response &#x3D; requests.post(url, headers&#x3D;headers, cookies&#x3D;cookies, data&#x3D;data, verify&#x3D;False)</span><br><span class="line">    json_str &#x3D; response.text.encode(&#39;utf-8&#39;)</span><br><span class="line">    json_dict &#x3D; json.loads(json_str)</span><br><span class="line"></span><br><span class="line">    hy &#x3D; json_dict[&quot;heyue&quot;]#获取json中合约</span><br><span class="line">    dt &#x3D; json_dict[&quot;delaystr&quot;]#获取json中最后更新时间</span><br><span class="line">    dt &#x3D; time.strptime(dt, &#39;%Y年%m月%d日 %H:%M:%S&#39;)#将获取的更新时间转成时间元组</span><br><span class="line">    dir_dt &#x3D; time.strftime(&#39;%Y%m&#39;,dt)#将时间元组格式化成YYYYmm用作文件时间目录</span><br><span class="line">    file_dt &#x3D; time.strftime(&#39;%Y%m%d%H%M%S&#39;,dt)#将时间元组格式化成YYYYmmddHHMMSS用作文件名时间部分</span><br><span class="line">    if not os.path.exists(dir_dt):</span><br><span class="line">        os.makedirs(dir_dt)</span><br><span class="line"></span><br><span class="line">    file &#x3D; &#39;.&#x2F;&#39; + dir_dt + &#39;&#x2F;&#39; + hy +&#39;_&#39; + file_dt + &#39;.json&#39;</span><br><span class="line">    with open(file, &quot;w+&quot;) as f:</span><br><span class="line">        json.dump(json_dict,f)</span><br><span class="line"></span><br><span class="line">    writeToHead(file_dt + &#39;\t&#39; + hy)#日志记录</span><br><span class="line">    progressBar &#x3D; str(heyue.index(hy)+1) + &#39;&#x2F;&#39; + str(len(heyue))#进度条</span><br><span class="line">    print(progressBar + &#39;\t&#39; + file_dt + &#39;\t&#39; + hy)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">writeToHead(&#39;\n---&#39; + dt_.strftime(&#39;%Y%m%d%H%M%S&#39;) + &#39;---&#39;)#日志头标志 ---YYYYMMDDHHMMSS---</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+        
+        <br />
+    </div>
+</div>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2021 <a target="_blank" rel="noopener" href="http://cqh.ch/">CQH</a></p>
+</footer>
+
+
+
+
+</body></html>
+
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/baidu.js"></script>
+
+
+<script src="/js/jquery.min.js"></script>
+

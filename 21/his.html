@@ -1,0 +1,146 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<meta name="keywords" content="医院系统,闭源,曲线救国">
+	
+	
+	<meta name="description" content="面对一堆闭源且没有接口的文件也只能喟然兴叹，不得不采取曲线救国">
+	
+	<title> 《黑客与药师——医院篇》 - CQH.CH</title>
+	
+<link rel="stylesheet" href="/css/zerone.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+
+<div class="index-about">
+    <i> Capital of Quant and Hedge </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/src/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>CQH.CH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li >
+                <a href="/categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Capital of Quant and Hedge </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《黑客与药师——医院篇》
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2021-07-05 00:00:00</span></span>
+        
+        <span class="attr">Tags：/
+        
+        <a class="tag" href="/tags/#黑客与药师" title="黑客与药师">黑客与药师</a>
+        <span>/</span>
+        
+        
+        </span>
+
+    </div>
+
+    <div class="post-content no-indent">
+        <p>《黑客与药师——医院篇》部分，以一篇2014年9月的《药剂科关于医院系统的想法》作引，从时间线来说，这是整个系列的开头。那时刚毕业，呆在药库处理药剂科的后端事务，医院的软硬件都有些年头，开始觉得新鲜，渐渐熟练，然后有了自己的想法。受限于连半桶都没有的编程水平，虽知道如何描述我所需的功能，但真要去实现具体的逻辑我头脑里只有毛线。遗憾的是，之后不久我就离开了医院，多年以后当我回来，医院已经完成了软硬件改造。重新审视这篇文章，我仍对当初的一些想法啧啧称奇，因为新系统问题重重且依旧未能实现我要的功能。而我面对一堆闭源且没有接口的文件也只能喟然兴叹，不得不采取曲线救国，后续的故事也是在这种背景下发生的。</p>
+<p>以下是原文：</p>
+<h2 id="《药剂科关于医院系统的想法》"><a href="#《药剂科关于医院系统的想法》" class="headerlink" title="《药剂科关于医院系统的想法》"></a>《药剂科关于医院系统的想法》</h2><p>• 处方系统——实现自动划价并能简单规范处方。对药品总数超过5种，抗生素超过1种，金额超过200元的处方自动标记并警示。处方数据应设计成利于导出，以便为其他应用提供接口。<br>• 查询的排序、分类与筛选。允许对查询按拼音、时间等排序，按科室、疾病、医师等分类，按年龄、药品等筛选。比如对于处方的查询，可以按病人的姓名拼音或开具处方时间进行排序，可以按疾病类型或处方医师进行分类，可以按药品的药理作用筛选出是否用了抗生素及是否开了与疾病相关的药品。<br>• 库存提醒——对库存为零及药库不足以供应1周药房不足以供应1日的品种进行预警。<br>• 补货——在库存提醒、药房发药、药库出库等页面可以直接将需要补入的品种加入补货申请单。<br>• 完善盘点功能。<br>• 对药械消耗（日/周/月/季/年）统计分析，为采购提供参考。<br>• 药品与器械分开管理。<br>• 抗生素监管。系统实现对抗生素自动监管，动态的统计处方医师的抗生素使用率，以每日、每月限额形式进行必要的限制。限额标准按科室，用途区分设定——门诊20%，住院60%，预防用药低于感染治疗。每日的使用率原则上不高于限额，超过时自动对医师进行提醒，对每月的平均用药率进行考核，未通过考核时系统自动对医师的抗生素处方权限进行一定的限制。<br>• 开放数据库的查询权限。对于系统未设计而又有可能会用到的数据，为了系统安全可以只允许查询而不能增删修改，允许通过第三方查询软件或编程得到数据。<br>• 冻结功能——对于暂时不使用的品规予以冻结，使其不干扰其他品规。同时允许对药品的数量实施部分冻结，比如对于内借或外借的数量。<br>• 药品的价格体系。<br>• 多窗口。系统的窗口可以缩放，桌面应允许两个以上窗口同时存在。<br>• 优化打印设置。药库的打印纸为241*280三分单，理论上一张单可以打印8条记录，实际上只打印了4条。<br>• 进批差额百分化。入库中，差额金额化并不利于药品价格管理，如果替换成百分化可以清楚知道药品定价的高低以利于调整。<br>• 药品有效期算法。药品的生产年份多为当年，这意味着输入年份往往是多余的，而且很多药品的批号和生产日期是关联的，运用算法将这一特征识别出来，只要在药品表加入有效期这一属性，将可以大大改善有效期的输入。<br>• 允许病人查询相关信息。<br>• 药品批号管理。现实中会遇到药品的批号改变而规格和价钱有所变化，同时医院用药比较不容易跟踪批号。为解决这些问题，有必要引进批号管理。即入库，出库，发药与批号相匹配。比如药库在一个月采购了3批不同号的药品，入库时就产生了3批库存，药房领药可以只申领药品，但药库出库的时候则可以选择批次出库，而药房在核药的时候，除了要核对药名和数量，对批号也该核对。</p>
+
+        
+        <br />
+    </div>
+</div>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2021 <a target="_blank" rel="noopener" href="http://cqh.ch/">CQH</a></p>
+</footer>
+
+
+
+
+</body></html>
+
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/baidu.js"></script>
+
+
+<script src="/js/jquery.min.js"></script>
+

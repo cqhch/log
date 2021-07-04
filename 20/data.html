@@ -1,0 +1,158 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<meta name="keywords" content="黑客,药师">
+	
+	
+	<meta name="description" content="一个人性的程序，应该提供数据批量利用的方式">
+	
+	<title> 《黑客与药师——数据》 - CQH.CH</title>
+	
+<link rel="stylesheet" href="/css/zerone.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+
+<div class="index-about">
+    <i> Capital of Quant and Hedge </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/src/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>CQH.CH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li >
+                <a href="/categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Capital of Quant and Hedge </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《黑客与药师——数据》
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2020-12-27 00:00:00</span></span>
+        
+        <span class="attr">Tags：/
+        
+        <a class="tag" href="/tags/#黑客与药师" title="黑客与药师">黑客与药师</a>
+        <span>/</span>
+        
+        
+        </span>
+
+    </div>
+
+    <div class="post-content no-indent">
+        <p>在从电脑抄写了很多的高效液相数据后，我终于乏了。开始寻思直接获取系统里的数据。</p>
+<p>最开始，我尝试直接破解数据文件。很遗憾，以我的计算机水平，这是个只有阿汤哥才能完成的不可能任务。</p>
+<p>后来，我打起了剪切板的主意。将液相程序里的数据先暂存到剪切板中，然后从剪切板取出来再做集中处理。下面就我的解决方案作一个简要解说。</p>
+<p><img src="hplcData1.png" alt="Empower3 高效液相报告" title="Empower3 高效液相报告"> </p>
+<p>Waters的高效液相结果可能长成上面这幅样子，如果将其数据复制出来粘贴到办公表格上，可能会是下面的样子：</p>
+<p><img src="hplcData2.png" alt="高效液相数据复制到办公表格" title="高效液相数据复制到办公表格"> </p>
+<p>而实际上我需要的数据可能要长成下面的样子才方便我做进一步的处理：</p>
+<p><img src="hplcData3.png" alt="预处理后的数据" title="预处理后的数据"> </p>
+<p>那么问题来了，该如何对复制出来的办公表格数据进行预处理呢？<br>首先是过滤掉不需要的数据，手动删除或只用所需列，这里留下名称列和面积列就好，总之是很简单的事情。</p>
+<p>其次分组的问题。包括两个方面：<br>第一是将每一个进样数据分开。因为观察到每个进样都有相同的数据起始标记，诸如“名称    保留时间    面积”这样的表头，我遍历了这些标记并取得索引，两个索引之间的即为一个进样数据。<br>第二是将每个批次分开。在我那个时候，有关物质则已经要做2个平行样品，而含量则需要做4个平行样品。我的升维打击很简单粗暴，将第一步得到的数组按2个或4个分割为一组。</p>
+<p>然后是每个进样数据的处理。因为处理方法中会预设组分的名称，也会出现没有名字的组分——即有关物质或杂质。所以可以将组分分成两个小组，有名的和无名的。之所以如此是因为我们可能需要对无名组分进行统计分析，算出最大的单杂和所有总杂，用max()和sum()对数组进行运算就可以得到。<br>实际上Empower3报告方法中有面积比例，也有未知峰最大和总和的运算，但这是自身做对照的情况下才适用。而如果是用自身的稀释液作参比则不行。浓度和面积虽成线性关系，但却并不意味着浓度稀释多少倍面积也会相应缩小。</p>
+<p>最后就是打印了，制表符搭配换行符，复制粘帖出来就是所需要的预处理后数据了。当然也可以直接生成文件。具体详情参见代码。</p>
+<p>当时的我只写了数据集中处理的脚本，而将数据暂存到剪切板中有一个要命的关键，要精确控制数据的先后顺序，否则可能导致错乱。我写不出那么智能的脚本，所以只能自己当人肉复制机。但好在复制速度快且根本不用比对，还是省去了不少麻烦。现在的话，我想到了更优的方案。无论Agilent还是Waters都有自动打印图谱的功能，只要将打印机换成虚拟打印机，自动打印出文件，然后用脚本分析这些文件并提取出所需要的数据，就可以解决人肉复制机的问题。虚拟打印其实是个很有用的工具。尤其是面对没有数据接口的封闭程序时，用纸张打印出来太过浪费且效率低下，但如果能打印到文件中去，事情就更轻松的方式。一个人性的程序，应该提供数据批量利用的方式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">######</span><br><span class="line"># hplc.py HPLC Data Program 高效液相数据处理</span><br><span class="line"># by cqh.ch 2016-10-24</span><br><span class="line">######</span><br><span class="line"></span><br><span class="line"># coding&#x3D;utf-8</span><br><span class="line">import time</span><br><span class="line">import xlrd</span><br><span class="line">import zipfile</span><br><span class="line"></span><br><span class="line">def getSheet(fileName&#x3D;&#39;Book1.xls&#39;, sheetName&#x3D;&#39;Sheet1&#39;):#从指定名字的工作簿获得指定名字工作表</span><br><span class="line">	xls&#x3D;xlrd.open_workbook(fileName)</span><br><span class="line">	sheet &#x3D; xls.sheet_by_name(sheetName)</span><br><span class="line">	return sheet</span><br><span class="line"></span><br><span class="line">def nac(sheet):#nameAreaCleaner 工作表组分与面积数据清洗 传入工作表,依据数据起始标记,将一组原始数据分成两个元素数组,元素一为知名组分面积的数组,元素二为未名组分面积的数组</span><br><span class="line">	idx &#x3D; []#数据起始标记索引</span><br><span class="line">	for row in range (0, sheet.nrows):</span><br><span class="line">		if sheet.row_values(row) &#x3D;&#x3D; sheet.row_values(0):#起始标记sheet.row_values(0)</span><br><span class="line">			idx.append(row)</span><br><span class="line">	arrs &#x3D; []#存放清洗后的数据组</span><br><span class="line">	for k in range(0, len(idx)-1):</span><br><span class="line">		know &#x3D; []#知名组分面积</span><br><span class="line">		unknow &#x3D; []#未名组分面积</span><br><span class="line">		bgn &#x3D; idx[k]+1#数据开始行</span><br><span class="line">		end &#x3D; idx[k+1]#数据结束行</span><br><span class="line">		for row in range(bgn, end):</span><br><span class="line">			if(sheet.cell(row, 1).value !&#x3D; &#39;&#39;):#名称不为空</span><br><span class="line">				know.append(sheet.cell(row, 3).value)</span><br><span class="line">			elif(sheet.cell(row, 1).value &#x3D;&#x3D; &#39;&#39; and sheet.cell(row, 3).value !&#x3D; &#39;&#39;):#名称为空但面积不为空</span><br><span class="line">				unknow.append(sheet.cell(row, 3).value)</span><br><span class="line">			#else:#空行</span><br><span class="line">				#print &#39;\n&#39;</span><br><span class="line">		arrs.append([know, unknow])</span><br><span class="line">	return arrs</span><br><span class="line"></span><br><span class="line">def lst(arr, n):#listSplit 数组分割,传入一个数组,将其分割成n个一组</span><br><span class="line">	lenIn &#x3D; len(arr)#源数组长度</span><br><span class="line">	if lenIn % n:</span><br><span class="line">		lenOut &#x3D; lenIn &#x2F; n + 1#目标长度</span><br><span class="line">	else:</span><br><span class="line">		lenOut &#x3D; lenIn &#x2F; n  </span><br><span class="line">	narr &#x3D; []#存放目标数组 </span><br><span class="line">	for m in range(lenOut):</span><br><span class="line">		narr.append(arr[m*n : (m+1)*n])  </span><br><span class="line">	return narr</span><br><span class="line"></span><br><span class="line">def adr(arr):#数组去重 array delete repeat</span><br><span class="line">	anr &#x3D; []#存放去重后数组 array not repeat</span><br><span class="line">	for x in arr:</span><br><span class="line">		if x not in anr:</span><br><span class="line">			anr.append(x)</span><br><span class="line">	return anr</span><br><span class="line"></span><br><span class="line">def ptr(arr, node&#x3D;0):#数组打印 array printer</span><br><span class="line">	m &#x3D; len(arr)</span><br><span class="line">	for i in range (m):</span><br><span class="line">		if type(arr[i]) &#x3D;&#x3D; list:</span><br><span class="line">			n &#x3D; len(arr[i])</span><br><span class="line">			temp &#x3D; &#39;\t&#39; * node</span><br><span class="line">			for j in range (n):</span><br><span class="line">				temp +&#x3D; str(arr[i][j]) + &#39;\t&#39;</span><br><span class="line">			print temp</span><br><span class="line">			if node:#默认不打印深层节点</span><br><span class="line">				ptr(arr[i], node+1)</span><br><span class="line">		else:</span><br><span class="line">			print(arr[i])</span><br><span class="line"></span><br><span class="line">def hl(arr):#含量 content</span><br><span class="line">	for i in range(len(arr)):</span><br><span class="line">		temp &#x3D; &#39;&#39;</span><br><span class="line">		for j in range(len(arr[i][0])):</span><br><span class="line">			temp +&#x3D; str(arr[i][0][j]) + &#39;\t&#39;</span><br><span class="line">		print temp</span><br><span class="line"></span><br><span class="line">def yg(arr):#有关物质 related substances</span><br><span class="line">	for i in range(len(arr)):</span><br><span class="line">		temp &#x3D; &#39;&#39;</span><br><span class="line">		if arr[i][1]:#其他杂质不为空</span><br><span class="line">			temp +&#x3D; str(max(arr[i][1])) + &#39;\t&#39; + str(sum(arr[i][1])) + &#39;\t&#39; #其他单个杂质最大 其他杂质总和</span><br><span class="line">		else:</span><br><span class="line">			temp +&#x3D; &#39;\t\t&#39;</span><br><span class="line">		for j in range(len(arr[i][0])):</span><br><span class="line">			temp +&#x3D; str(arr[i][0][j]) + &#39;\t&#39;</span><br><span class="line">		print temp</span><br><span class="line"></span><br><span class="line">def rst(sheet, keyRow&#x3D;5):#result 将处理好的结果表格转换成字典键值对</span><br><span class="line">	arr &#x3D; []</span><br><span class="line">	key &#x3D; sheet.row_values(keyRow)</span><br><span class="line">	for row in range (keyRow+1, sheet.nrows):</span><br><span class="line">		val &#x3D; sheet.row_values(row)</span><br><span class="line">		dic &#x3D; dict(zip(key, val))</span><br><span class="line">		arr.append(dic)</span><br><span class="line">	return arr</span><br><span class="line"></span><br><span class="line">sheet &#x3D; getSheet(fileName&#x3D;&#39;Book1.xls&#39;, sheetName&#x3D;&#39;Sheet1&#39;)</span><br><span class="line"></span><br><span class="line">#打印一列去重数据</span><br><span class="line">ptr(adr(sheet.col_values(3)))</span><br><span class="line"></span><br><span class="line">#将一维数组转换为四维并打印</span><br><span class="line">ptr(lst(adr(sheet.col_values(3)), 4))</span><br><span class="line"></span><br><span class="line"># 含量</span><br><span class="line">hl(nac(sheet))</span><br><span class="line"></span><br><span class="line"># 有关物质</span><br><span class="line">yg(nac(sheet))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+        
+        <br />
+    </div>
+</div>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2021 <a target="_blank" rel="noopener" href="http://cqh.ch/">CQH</a></p>
+</footer>
+
+
+
+
+</body></html>
+
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/baidu.js"></script>
+
+
+<script src="/js/jquery.min.js"></script>
+
