@@ -1,0 +1,153 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<meta name="keywords" content="试金者,金融,数据分析,可视化">
+	
+	
+	<meta name="description" content="随机漫步或说布朗运动似乎启示了我们，物理学可以用来投机。用大规模的数据支撑或许能够量化某些作用力。但这好像既不是牛顿理学也不是量子力学，线性代数也许可以解决部分问题，但要求解这样的方程，势必需要不菲的算力。而统计学或许是最经济的方式。">
+	
+	<title> 《试金者——金融数据分析初探》 - CQH.CH</title>
+	
+<link rel="stylesheet" href="/css/zerone.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+
+<div class="index-about">
+    <i> Capital of Quant and Hedge </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/src/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>CQH.CH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li >
+                <a href="/categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Capital of Quant and Hedge </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《试金者——金融数据分析初探》
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2021-08-15 00:00:00</span></span>
+        
+        <span class="attr">Tags：/
+        
+        <a class="tag" href="/tags/#试金者" title="试金者">试金者</a>
+        <span>/</span>
+        
+        
+        </span>
+
+    </div>
+
+    <div class="post-content no-indent">
+        <p>尽管从2018年就已经部署爬虫抓取数据，但分析的工作却始终没有跟上，一方面是因为自身的知识储备还不够，另一方面是账户上没有可供操作的盈余失去了动力。以前可以借口说电脑的算力不够，但现在我寄予厚望的生产力已经在那里积灰了整整14个月……大概唯一欣慰的是有些电脑配件涨价了，配来的电脑竟没有贬值反而增值了10%+。新冠下的某些人们终究上沉浸在了虚拟的世界，疯狂且自大。</p>
+<p>K线图很强大，我不否认，但也给我们一种错觉：即价格是时间的函数。但事实告诉我们，时间只是其中的一个变量，如果只用这一个变量去解决问题的话，结果可能非常玄学。所以才有随机漫步或说布朗运动的提法。</p>
+<p>走势曲线图只有一个维度的数据，相比蜡烛图、箱线图等含有的信息更少，正是在这样的背景下，我萌发了自己动手的念头。最开始我用Python写了个简单的脚本。策略很简单高抛低吸，分析每周、月、季、年度数据，四分之一位买入，四分之三位卖出。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#sba .py Statistics Basic Analysis 统计基本分析</span><br><span class="line">#ande.stduio (c) 2018-11-20 20:30</span><br><span class="line"></span><br><span class="line">import numpy as np</span><br><span class="line">from collections import OrderedDict</span><br><span class="line"></span><br><span class="line">def sba(arr):#Statistics Basic Analysis</span><br><span class="line">    dic &#x3D; OrderedDict()</span><br><span class="line">    dic[&#39;min&#39;] &#x3D; np.min(arr)#最小值</span><br><span class="line">    dic[&#39;max&#39;] &#x3D; np.max(arr)#最大值</span><br><span class="line">    dic[&#39;5&#39;] &#x3D; np.percentile(arr, 5)#百分之五位</span><br><span class="line">    dic[&#39;25&#39;] &#x3D; np.percentile(arr, 5)#四分之一位</span><br><span class="line">    dic[&#39;50&#39;] &#x3D; np.percentile(arr, 5)#中位数</span><br><span class="line">    dic[&#39;75&#39;] &#x3D; np.percentile(arr, 5)#四分之三位</span><br><span class="line">    dic[&#39;95&#39;] &#x3D; np.percentile(arr, 95)#百分之九十五位</span><br><span class="line">    dic[&#39;mean&#39;] &#x3D; np.mean(arr)#平均数</span><br><span class="line">    dic[&#39;std&#39;] &#x3D; np.std(arr)#标准差</span><br><span class="line">    return dic</span><br></pre></td></tr></table></figure>
+
+<p>后来我偶尔也会想着要是用可视化作辅助那该多好啊。但终归需求不强烈，直到疫情期间百无聊赖的捣鼓Echarts.js，我终于写出了一个还算满意的视图。首先的想法是用直方图实现分布，这要用到ecStat.js，略显遗憾的是原生只支持频数没有频率分布（最新的ecStat-1.2.0.js仍是没有）。为了实现大一统的理想，我在computeBins(data, optOrMethod){}函数段里增加了如下源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line">	return &#123;</span><br><span class="line">		bins: bins,</span><br><span class="line">		data: data,</span><br><span class="line">		customData: customData</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line"> * 计算区间分布频率</span><br><span class="line"> * 20210814</span><br><span class="line"> * Ande Studio</span><br><span class="line"> *&#x2F;</span><br><span class="line">	var lens &#x3D; values.length;&#x2F;&#x2F;数据长度			</span><br><span class="line">	var rateData &#x3D; map(bins, function (bin) &#123;&#x2F;&#x2F;计算区间分布频率</span><br><span class="line">		&#x2F;&#x2F;return [+((bin.x0 + bin.x1) &#x2F; 2).toFixed(toFixedPrecision), (bin.sample.length&#x2F;lens).toFixed(toFixedPrecision)];</span><br><span class="line">		return [+((bin.x0 + bin.x1) &#x2F; 2).toFixed(toFixedPrecision), (bin.sample.length&#x2F;lens).toFixed(4)];</span><br><span class="line">	&#125;);</span><br><span class="line"></span><br><span class="line">	return &#123;</span><br><span class="line">		bins: bins,</span><br><span class="line">		data: data,</span><br><span class="line">		rateData:rateData,&#x2F;&#x2F;区间分布频率</span><br><span class="line">		customData: customData</span><br><span class="line">	&#125;;</span><br></pre></td></tr></table></figure>
+<p>其实仅从图形上看，频数与频率是没有区别的，但我的想法是在一个视图中实现将走势曲线投影成分布图，即大一统。要实现这个功能，频数的坐标轴将会是变动不可控，而频率的坐标轴却是固定的0~1。我的做法是用x1，y1轴画正常的走势曲线。然后用y2轴做分布区间，x2轴锚定频率。为了辨析统计四分位数，我直接将箱线图也叠了进去。以Au99.99_20210813数据演示，最终的效果如下：<br><img src="line-histogram-boxplot-Au99.99-20210813.jpg" alt="line-histogram-boxplot-Au99.99-20210813" title="line-histogram-boxplot-Au99.99-20210813"> </p>
+<p>通过箱线图可以帮我们高低定位，而通过分布图可以将我们的决策落在胜率更大区间。在分布图中，虽然有几个峰，但整体上还是像钟形的正态分布，如果将数据分成晚间和日间两个区段，可以将两个峰分离出来。</p>
+<p><img src="histogram-Au99.99-20210813.jpg" alt="histogram-Au99.99-20210813.jpg" title="histogram-Au99.99-20210813.jpg"> </p>
+
+        
+        <br />
+    </div>
+</div>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2021 <a target="_blank" rel="noopener" href="http://cqh.ch/">CQH</a></p>
+</footer>
+
+
+
+
+</body></html>
+
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/baidu.js"></script>
+
+
+<script src="/js/jquery.min.js"></script>
+
