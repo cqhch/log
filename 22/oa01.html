@@ -72,7 +72,7 @@
         <div class="search-input">
             <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
             <input id="search-input"/>
-            <span id="begin-search">搜索</span>
+            <span id="begin-search">search</span>
         </div>
         <div class="search-result-container" id="search-result-container">
 
@@ -93,9 +93,9 @@
     </div>
 
     <div class="post-meta">
-        <span class="attr">发布于：<span>2022-03-01 00:00:00</span></span>
+        <span class="attr">Post：<span>2022-03-01 00:00:00</span></span>
         
-        <span class="attr">标签：/
+        <span class="attr">Tags：/
         
         <a class="tag" href="/tags/#黑客与药师" title="黑客与药师">黑客与药师</a>
         <span>/</span>
@@ -109,11 +109,11 @@
         <h1 id="黑客与药师——OA的研究-一"><a href="#黑客与药师——OA的研究-一" class="headerlink" title="黑客与药师——OA的研究(一)"></a>黑客与药师——OA的研究(一)</h1><h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>如果要用一个词评价我们医院所使用的的OA系统，那应该就是“落后”。我没有重写一个的打算，而且我也接触不到后端的代码，毕竟工作不是这个。但我又实在忍受不了一些低效的操作。我试着仅从前端的角度实现一些我想要的功能，并将我的折腾写成了这篇文章。你可能会疑惑，既然我改不了服务器上的代码，那么我是怎么实现的呢？这是因为某天我知晓了浏览器可以通过书签运行JavaScript代码而达到引入页面的效果（FireFox/Chrome/Edge可以，IE据说不行），这就为我打开了一扇窗户。</p>
 <h2 id="附件与命名"><a href="#附件与命名" class="headerlink" title="附件与命名"></a>附件与命名</h2><p>之前在临床科室体会不了，但在医务科接触的OA附件实在太多，要是每个文件都要像下面这样自己重命名的话，那简直是一种折磨。</p>
 <p><img src="image-20220228173000622.png" alt="image-20220228173000622"></p>
-<p>我可以理解附件名将中文转换成ASCII字符的做法，但好歹加一个“download”属性啊。我的做法建立一个专门附件的FileJS工具栏书签如下：</p>
+<p>我可以理解附件名将中文转换成ASCII字符的做法，但好歹加一个“download”属性啊。我的做法建立一个专门处理附件的工具栏JS书签如下：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">javascript:</span><br><span class="line">a = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&#x27;a&#x27;</span>)[<span class="number">0</span>];</span><br><span class="line">href = a.href;</span><br><span class="line">v = a.innerHTML;</span><br><span class="line">a.setAttribute(<span class="string">&quot;download&quot;</span>,v);</span><br><span class="line">a.click();</span><br></pre></td></tr></table></figure>
 
-<p>逻辑就是，获取附件所在的<a>标签，取得其描述文本，再往<a>标签里设置一个“download”属性，值为描述文本，然后模拟点击。这样我只要点击一下该JS书签将其引入页面就可以了，然后选择文件处理方式，只需要两步就可以了。而在这之前，我的操作步骤是这样的：</p>
-<p>【1.选中<a>标签的描述文本】-【2. 复制Ctrl +C】-【3.右键单击】-【4.从链接另存文件为】-【5. 重命名 粘贴Ctrl +V】-【6.保存确定】</p>
+<p>逻辑就是，获取附件所在的a标签，取得其描述文本，再往标签里设置一个“download”属性，值为描述文本，然后模拟点击。这样我只要点击一下该JS书签将其引入页面就可以了，然后选择文件处理方式，只需要两步就可以了。而在这之前，我的操作步骤是这样的：</p>
+<p>【1.选中a标签的描述文本】-【2. 复制Ctrl +C】-【3.右键单击】-【4.从链接另存文件为】-【5. 重命名 粘贴Ctrl +V】-【6.保存确定】</p>
 <p>将6步简成了2步，顿时感觉世界清爽了很多不是。在步骤上，这里前端的实现和后端其实是一样的。其实OA上是有一个点击在线预览的功能实现的，但浏览器上的操作终归没有专业软件方便，比如修改或批注之类的。</p>
 <p><img src="image-20220228175312983.png" alt="image-20220228175312983"></p>
 <h2 id="工作的阅处"><a href="#工作的阅处" class="headerlink" title="工作的阅处"></a>工作的阅处</h2><p>对于工作列表的处理，以前我的操作是这样的：</p>
