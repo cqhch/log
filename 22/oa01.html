@@ -1,0 +1,165 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<meta name="keywords" content="书签JS,JavaScript">
+	
+	
+	<meta name="description" content="黑客与药师——OA的研究(一)<a href="#缘起" class="">
+	
+	<title> 《黑客与药师——OA的研究(一)》 - CQH.CH</title>
+	
+<link rel="stylesheet" href="/css/zerone.css">
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+
+
+<div class="index-about">
+    <i> Capital of Quant and Hedge </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/src/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>CQH.CH</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li >
+                <a href="/categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> Capital of Quant and Hedge </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        <div class="post-container">
+    <div class="post-title">
+        《黑客与药师——OA的研究(一)》
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2022-03-01 00:00:00</span></span>
+        
+        <span class="attr">Tags：/
+        
+        <a class="tag" href="/tags/#黑客与药师" title="黑客与药师">黑客与药师</a>
+        <span>/</span>
+        
+        
+        </span>
+
+    </div>
+
+    <div class="post-content no-indent">
+        <h1 id="黑客与药师——OA的研究-一"><a href="#黑客与药师——OA的研究-一" class="headerlink" title="黑客与药师——OA的研究(一)"></a>黑客与药师——OA的研究(一)</h1><h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>如果要用一个词评价我们医院所使用的的OA系统，那应该就是“落后”。我没有重写一个的打算，而且我也接触不到后端的代码，毕竟工作不是这个。但我又实在忍受不了一些低效的操作。我试着仅从前端的角度实现一些我想要的功能，并将我的折腾写成了这篇文章。你可能会疑惑，既然我改不了服务器上的代码，那么我是怎么实现的呢？这是因为某天我知晓了浏览器可以通过书签运行JavaScript代码而达到引入页面的效果（FireFox/Chrome/Edge可以，IE据说不行），这就为我打开了一扇窗户。</p>
+<h2 id="附件与命名"><a href="#附件与命名" class="headerlink" title="附件与命名"></a>附件与命名</h2><p>之前在临床科室体会不了，但在医务科接触的OA附件实在太多，要是每个文件都要像下面这样自己重命名的话，那简直是一种折磨。</p>
+<p><img src="image-20220228173000622.png" alt="image-20220228173000622"></p>
+<p>我可以理解附件名将中文转换成ASCII字符的做法，但好歹加一个“download”属性啊。我的做法建立一个专门附件的FileJS工具栏书签如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">javascript:</span><br><span class="line">a = <span class="built_in">document</span>.getElementsByTagName(<span class="string">&#x27;a&#x27;</span>)[<span class="number">0</span>];</span><br><span class="line">href = a.href;</span><br><span class="line">v = a.innerHTML;</span><br><span class="line">a.setAttribute(<span class="string">&quot;download&quot;</span>,v);</span><br><span class="line">a.click();</span><br></pre></td></tr></table></figure>
+
+<p>逻辑就是，获取附件所在的<a>标签，取得其描述文本，再往<a>标签里设置一个“download”属性，值为描述文本，然后模拟点击。这样我只要点击一下该JS书签将其引入页面就可以了，然后选择文件处理方式，只需要两步就可以了。而在这之前，我的操作步骤是这样的：</p>
+<p>【1.选中<a>标签的描述文本】-【2. 复制Ctrl +C】-【3.右键单击】-【4.从链接另存文件为】-【5. 重命名 粘贴Ctrl +V】-【6.保存确定】</p>
+<p>将6步简成了2步，顿时感觉世界清爽了很多不是。在步骤上，这里前端的实现和后端其实是一样的。其实OA上是有一个点击在线预览的功能实现的，但浏览器上的操作终归没有专业软件方便，比如修改或批注之类的。</p>
+<p><img src="image-20220228175312983.png" alt="image-20220228175312983"></p>
+<h2 id="工作的阅处"><a href="#工作的阅处" class="headerlink" title="工作的阅处"></a>工作的阅处</h2><p>对于工作列表的处理，以前我的操作是这样的：</p>
+<p>【1.进入工作列表】-【2.点击某个具体工作】-【3.工作处理】-【4.回退工作列表】-【5.下一项工作】</p>
+<p>我期望的工作模式是这样的：</p>
+<p>【1.某项具体工作】-【2.工作处理】-【3.下一项工作】</p>
+<p>因为url地址规范且有规律，我可以通过自己构造url来访问我需要的资源，如果每次都要自己手动在地址栏变更参数的话，我想我宁愿借助列表逐个点击。但如果能通过JS完成对地址栏url的变更，那基本就在前端实现了一个爬虫了。我的实现代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">javascript:</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getSearch</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> url = location.search;</span><br><span class="line">	<span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br><span class="line">		<span class="keyword">if</span> (url.indexOf(<span class="string">&quot;?&quot;</span>) != -<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="keyword">var</span> str = url.substr(<span class="number">1</span>);</span><br><span class="line">			str = <span class="built_in">decodeURI</span>(str);</span><br><span class="line">			strs = str.split(<span class="string">&quot;&amp;&quot;</span>);</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; strs.length; i ++) &#123;</span><br><span class="line">				obj[strs[i].split(<span class="string">&quot;=&quot;</span>)[<span class="number">0</span>]]=strs[i].split(<span class="string">&quot;=&quot;</span>)[<span class="number">1</span>];</span><br><span class="line">			&#125; </span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">changeURLArg</span>(<span class="params">url,arg,arg_val</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> pattern=arg+<span class="string">&#x27;=([^&amp;]*)&#x27;</span>;</span><br><span class="line">    <span class="keyword">var</span> replaceText=arg+<span class="string">&#x27;=&#x27;</span>+arg_val; </span><br><span class="line">    <span class="keyword">if</span>(url.match(pattern))&#123;</span><br><span class="line">        <span class="keyword">var</span> tmp=<span class="string">&#x27;/(&#x27;</span>+ arg+<span class="string">&#x27;=)([^&amp;]*)/gi&#x27;</span>;</span><br><span class="line">        tmp=url.replace(<span class="built_in">eval</span>(tmp),replaceText);</span><br><span class="line">        <span class="keyword">return</span> tmp;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123; </span><br><span class="line">        <span class="keyword">if</span>(url.match(<span class="string">&#x27;[?]&#x27;</span>))&#123; </span><br><span class="line">            <span class="keyword">return</span> url+<span class="string">&#x27;&amp;&#x27;</span>+replaceText; </span><br><span class="line">        &#125;<span class="keyword">else</span>&#123; </span><br><span class="line">            <span class="keyword">return</span> url+<span class="string">&#x27;?&#x27;</span>+replaceText; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = GetSearch(); </span><br><span class="line">id = <span class="built_in">parseInt</span>(obj[<span class="string">&quot;id&quot;</span>])+<span class="number">1</span>;</span><br><span class="line"><span class="built_in">window</span>.location.href = changeURLArg(<span class="built_in">window</span>.location.href,<span class="string">&#x27;id&#x27;</span>,id);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>首先调用getSearch()取得地址栏url查询参数，参数id+1指向下一个工作，然后调用changeURLArg构造出下一个工作的url，然后赋值给window.location.href实现跳转。其实只有一个url查询参数id，代码本可以更简约，但考虑到扩展性，索性就实现了两个函数。同样的道理，往前的操作只要id-1就可以了。</p>
+<p>就这样，我实现了只要点击一下JS书签就可以处理下一个工作了。当然我可以设置一个定时器，让它执行一定逻辑等待一定时间就自动跳到下一个</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">//do something</span></span><br><span class="line">&#125;, <span class="number">15000</span>);</span><br></pre></td></tr></table></figure>
+
+<p>自动执行一些类似简单阅读或自动回复“收到”等傻瓜操作应该是可行的，但对一些要具体处理的显然是不负责任的。但如果实现一个人工智能AI，并将操作转给AI却是可以尝试的。就比如我正在想实现的一个AI功能是：将图片式PDF识别成可检索的文本。如果实现了接口，可以借助ajax来调用。我原本的想法用爬虫将OA的文件全爬到本地下来，然后再对其进行识别建立索引。但现在又有新的方式了。实现了文本识别和检索，后面就可以做文本分析和情感分析了，提取工作重点。特事特办，要事要办，急事急办，技术是第一生产力，面对文山会海，才能游刃有余。而且我隐约觉得情商的缺陷可以在一定程度通过技术手段来弥补。想得有点远了就是，但理论上是可行的，而且我感觉我可以实现。</p>
+
+        
+        <br />
+    </div>
+</div>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2021 <a target="_blank" rel="noopener" href="http://cqh.ch/">CQH</a></p>
+</footer>
+
+
+
+
+</body></html>
+
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/baidu.js"></script>
+
+
+<script src="/js/jquery.min.js"></script>
+
